@@ -3060,10 +3060,11 @@ module.exports = toString;
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* global CustomEvent */
+
 
 var _iframeResizer = __webpack_require__(90);
 
@@ -3078,69 +3079,74 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var IframeIntegrationClient = function () {
-    function IframeIntegrationClient(elementTagName, targetUrl) {
-        _classCallCheck(this, IframeIntegrationClient);
+  function IframeIntegrationClient(targetUrl, elementTagName) {
+    _classCallCheck(this, IframeIntegrationClient);
 
-        this.elementTagName = elementTagName;
-        this.targetUrl = targetUrl;
+    this.targetUrl = targetUrl;
+    this.elementTagName = elementTagName;
+  }
+
+  _createClass(IframeIntegrationClient, [{
+    key: 'encodeQueryData',
+    value: function encodeQueryData(data) {
+      var ret = [];
+      for (var d in data) {
+        ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+      }
+      return ret.join('&');
     }
+  }, {
+    key: 'render',
+    value: function render(options, targetUrl, elementTagName) {
+      var ifrm = void 0,
+          width = void 0,
+          element = void 0;
 
-    _createClass(IframeIntegrationClient, [{
-        key: 'encodeQueryData',
-        value: function encodeQueryData(data) {
-            var ret = [];
-            for (var d in data) {
-                ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
-            }return ret.join('&');
-        }
-    }, {
-        key: 'render',
-        value: function render(options, elementTagName, targetUrl) {
-            var ifrm = void 0,
-                width = void 0,
-                element = void 0;
+      if ((0, _isUndefined2.default)(elementTagName)) {
+        element = document.getElementsByTagName(this.elementTagName)[0];
+      } else {
+        element = document.getElementsByTagName(elementTagName)[0];
+      }
+      if ((0, _isUndefined2.default)(element)) {
+        console.error('no matching element for listing was found or provided, place an ' + this.elementTagName + ' on the page before executing the render method or pass an element along as the third parameter');
+        return false;
+      }
+      if ((0, _isUndefined2.default)(targetUrl)) {
+        targetUrl = this.targetUrl;
+      }
+      if ((0, _isUndefined2.default)(options.width)) {
+        width = '100%';
+      } else {
+        width = options.width;
+        delete options.width;
+      }
 
-            if ((0, _isUndefined2.default)(elementTagName)) {
-                element = document.getElementsByTagName(this.elementTagName)[0];
-            } else {
-                element = document.getElementsByTagName(elementTagName)[0];
+      ifrm = document.createElement('iframe'
+      // on load we will asyncrounously initiliaze the iframe resizer plugin
+      );ifrm.onload = function () {
+        console.log('onload');
+        setTimeout(function () {
+          console.log('timeout');
+          (0, _iframeResizer2.default)({
+            messageCallback: function messageCallback(messageData) {
+              console.log('message');
+              var name = messageData.name;
+              var event = new CustomEvent(name, { bubbles: true, cancelable: true });
+              document.dispatchEvent(event);
             }
-            if ((0, _isUndefined2.default)(element)) {
-                console.error('no matching element for listing was found or provided, place an ' + this.elementTagName + ' on the page before executing the render method or pass an element along as the third parameter');
-                return false;
-            }
-            if ((0, _isUndefined2.default)(targetUrl)) {
-                targetUrl = this.targetUrl;
-            }
-            if ((0, _isUndefined2.default)(options.width)) {
-                width = '100%';
-            } else {
-                width = options.width;
-                delete options.width;
-            }
+          });
+        }, 0);
+      };
+      // assign url & attributes
+      ifrm.setAttribute('style', 'width:' + width + '; border: none');
+      ifrm.setAttribute('scrolling', 'no');
+      ifrm.setAttribute('src', targetUrl + this.encodeQueryData(options));
 
-            ifrm = document.createElement('iframe');
-            // assign url & attributes
-            ifrm.onload = function () {
-                setTimeout(function () {
-                    (0, _iframeResizer2.default)({
-                        messageCallback: function messageCallback(messageData) {
-                            var name = messageData.name,
-                                event = new CustomEvent(name, { bubbles: true, cancelable: true });
-                            document.dispatchEvent(event);
-                        }
-                    });
-                }, 0);
-            };
-            ifrm.setAttribute('scrolling', 'no');
-            ifrm.setAttribute('style', 'width:' + width + '; border: none;');
-            ifrm.setAttribute('src', targetUrl + this.encodeQueryData(options));
+      element.parentNode.replaceChild(ifrm, element);
+    }
+  }]);
 
-            element.parentNode.replaceChild(ifrm, element);
-        }
-    }]);
-
-    return IframeIntegrationClient;
+  return IframeIntegrationClient;
 }();
 
 exports.default = IframeIntegrationClient;
@@ -3158,7 +3164,12 @@ var _IframeIntegrationClient2 = _interopRequireDefault(_IframeIntegrationClient)
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-window.iframeIntegrationClient = new _IframeIntegrationClient2.default('iframe-integration-placement', 'http://davidjbradshaw.com/iframe-resizer/example/frame.content.html?');
+window.iframeIntegrationClient = new _IframeIntegrationClient2.default('http://davidjbradshaw.com/iframe-resizer/example/frame.content.html?', 'iframe-integration-placement'); /* global window */
+
+
+if (typeof window.iframeIntegrationAsyncInit !== 'undefined') {
+  window.iframeIntegrationAsyncInit(window.iframeIntegrationClient);
+}
 
 /***/ }),
 /* 90 */

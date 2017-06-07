@@ -3,9 +3,9 @@ import iFrameResize from 'iframe-resizer/js/iframeResizer'
 import isUndefined from 'lodash/fp/isUndefined'
 
 class IframeIntegrationClient {
-  constructor (elementTagName, targetUrl) {
-    this.elementTagName = elementTagName
+  constructor (targetUrl, elementTagName) {
     this.targetUrl = targetUrl
+    this.elementTagName = elementTagName
   }
 
   encodeQueryData (data) {
@@ -16,7 +16,7 @@ class IframeIntegrationClient {
     return ret.join('&')
   }
 
-  render (options, elementTagName, targetUrl) {
+  render (options, targetUrl, elementTagName) {
     let ifrm, width, element
 
     if (isUndefined(elementTagName)) {
@@ -44,6 +44,7 @@ class IframeIntegrationClient {
       setTimeout(() => {
         iFrameResize({
           messageCallback: function (messageData) {
+            console.log('message')
             let name = messageData.name
             let event = new CustomEvent(name, {bubbles: true, cancelable: true})
             document.dispatchEvent(event)
@@ -52,8 +53,8 @@ class IframeIntegrationClient {
       }, 0)
     }
     // assign url & attributes
+    ifrm.setAttribute('style', 'width:' + width + '; border: none')
     ifrm.setAttribute('scrolling', 'no')
-    ifrm.setAttribute('style', 'width:' + width + ' border: none')
     ifrm.setAttribute('src', targetUrl + this.encodeQueryData(options))
 
     element.parentNode.replaceChild(ifrm, element)
