@@ -4,7 +4,7 @@
   "description": "This is a boilerplate you can use if you want to dynamically include an iframe to provide some kind of service or widget",
   "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" ",
     "build": "echo \"Starting Build\" && ./node_modules/.bin/webpack"
   },
   "repository": {
