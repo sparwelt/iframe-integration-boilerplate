@@ -1,0 +1,10 @@
+language: node_js
+sudo: false
+dist: trusty
+cache:
+  directories:
+  - node_modules # NPM packages
+install:
+  - npm install
+  - npm run build
+  - ./node_modules/.bin/eslint app/*
