@@ -16,7 +16,9 @@ It mostly uses & integrates https://github.com/davidjbradshaw/iframe-resizer whi
 
 The side serving the content ( e.g. the one being integrated as iframe ) can simply use the default iframe-resizer contentWindow client as part of its application or via CDN
 
-```<script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.14/iframeResizer.contentWindow.min.js"></script>```
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.14/iframeResizer.contentWindow.min.js"></script>
+```
 
 ### Integrating Side
 
@@ -28,7 +30,7 @@ The side integrating the iframe should load the `dist/client.js` provided here.
 
 You can simply use the script as is and provide your custom information on initialization
 
-```
+```html
 <your-integration-placement></your-integration-placement>
 <script src="http://example-serving-side.com/dist/client.js"></script>
 <script>
@@ -51,12 +53,12 @@ To change the naming or preset your placement name & url simply modify the `app/
 ### How to build the app
 Simply install all npm dependencies ( including dev dependencies ) and run build.
 
-```
+```bash
 npm install
 npm run build
 ```
 if you want to use a different source `client.js` file
-```
+```bash
 npm install
 ./node_modules/.bin/webpack app/your-client.js dist/client.js
 ```
@@ -64,7 +66,7 @@ npm install
 
 ### Asynchronous Usage
 The Client Script will call a method ( default `iframeIntegrationAsyncInit`) when it finished loading, allowing Asynchronous Usage, the name can be changed with an custom `app/client.js`  
-```
+```html
 <your-integration-placement></your-integration-placement>
 <script>
     var yourIntagrationCallback = function () {
