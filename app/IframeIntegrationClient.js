@@ -21,7 +21,7 @@ class IframeIntegrationClient {
 
   buildSourceUrl (targetUrl, options) {
     if (isEmpty(options)) {
-      return targetUrl;
+      return targetUrl
     }
     if (endsWith(targetUrl, '?')) {
       return `${targetUrl}${this.encodeQueryData(options)}`
