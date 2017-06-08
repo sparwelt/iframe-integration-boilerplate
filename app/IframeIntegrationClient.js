@@ -2,6 +2,7 @@
 import iFrameResize from 'iframe-resizer/js/iframeResizer'
 import isUndefined from 'lodash-es/isUndefined'
 import includes from 'lodash-es/includes'
+import endsWith from 'lodash-es/endsWith'
 
 class IframeIntegrationClient {
   constructor (targetUrl, elementTagName) {
@@ -18,7 +19,9 @@ class IframeIntegrationClient {
   }
 
   buildSourceUrl (targetUrl, options) {
-    if (includes(targetUrl, '?')) {
+    if (endsWith(targetUrl, '?')) {
+      return `${targetUrl}${this.encodeQueryData(options)}`
+    } else if (includes(targetUrl, '?')) {
       return `${targetUrl}&${this.encodeQueryData(options)}`
     } else {
       return `${targetUrl}?${this.encodeQueryData(options)}`
