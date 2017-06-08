@@ -3,6 +3,7 @@ import iFrameResize from 'iframe-resizer/js/iframeResizer'
 import isUndefined from 'lodash-es/isUndefined'
 import includes from 'lodash-es/includes'
 import endsWith from 'lodash-es/endsWith'
+import isEmpty from 'lodash-es/isEmpty'
 
 class IframeIntegrationClient {
   constructor (targetUrl, elementTagName) {
@@ -19,6 +20,9 @@ class IframeIntegrationClient {
   }
 
   buildSourceUrl (targetUrl, options) {
+    if (isEmpty(options)) {
+      return targetUrl;
+    }
     if (endsWith(targetUrl, '?')) {
       return `${targetUrl}${this.encodeQueryData(options)}`
     } else if (includes(targetUrl, '?')) {
