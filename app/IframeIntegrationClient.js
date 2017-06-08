@@ -1,6 +1,7 @@
 /* global CustomEvent */
 import iFrameResize from 'iframe-resizer/js/iframeResizer'
-import isUndefined from 'lodash/fp/isUndefined'
+import isUndefined from 'lodash-es/isUndefined'
+import includes from 'lodash-es/includes'
 
 class IframeIntegrationClient {
   constructor (targetUrl, elementTagName) {
@@ -14,6 +15,14 @@ class IframeIntegrationClient {
       ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]))
     }
     return ret.join('&')
+  }
+
+  buildSourceUrl (targetUrl, options) {
+    if (includes(targetUrl, '?')) {
+      return `${targetUrl}&${this.encodeQueryData(options)}`
+    } else {
+      return `${targetUrl}?${this.encodeQueryData(options)}`
+    }
   }
 
   render (options, targetUrl, elementTagName) {
@@ -53,11 +62,11 @@ class IframeIntegrationClient {
       }, 0)
     }
     // assign url & attributes
-    ifrm.setAttribute('style', 'width:' + width + '; border: none')
+    ifrm.setAttribute('style', `width: ${width}; border: none`)
     ifrm.setAttribute('scrolling', 'no')
-    ifrm.setAttribute('src', targetUrl + this.encodeQueryData(options))
+    ifrm.setAttribute('src', this.buildSourceUrl(targetUrl, options))
 
-    element.parentNode.replaceChild(ifrm, element)
+    return element.parentNode.replaceChild(ifrm, element)
   }
 }
 

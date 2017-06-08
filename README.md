@@ -36,14 +36,13 @@ You can simply use the script as is and provide your custom information on initi
 <script>
     window.iframeIntegrationClient.render(
         {
-            'your_option' : 'some value',
-            'another_option' : 'another 
+            'your_option' : 'someValue',
+            'another_option' : 'anotherValue'
         },
         'http://example-serving-side.com/your-iframe-source.html',
         'your-integration-placement'
     );
 </script>
-
 ```
 
 ### Customize
@@ -69,22 +68,16 @@ The Client Script will call a method ( default `iframeIntegrationAsyncInit`) whe
 ```html
 <your-integration-placement></your-integration-placement>
 <script>
-    var yourIntagrationCallback = function () {
+    window.iframeIntegrationAsyncInit = function () {
         iframeIntegrationClient.render(
             {
-                'your_option' : 'some value',
-                'another_option' : 'another 
+                'your_option' : 'someValue',
+                'another_option' : 'anotherValue'
             },
             'http://example-serving-side.com/your-iframe-source.html',
             'your-integration-placement'
         );
     };
-    
-    if ('undefined' === swvapp) {
-        window.iframeIntegrationAsyncInit = yourIntagrationCallback;
-    } else {
-        yourIntagrationCallback();
-    }
     (function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) return;
