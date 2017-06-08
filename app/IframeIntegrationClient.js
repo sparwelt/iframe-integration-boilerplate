@@ -60,7 +60,6 @@ class IframeIntegrationClient {
       setTimeout(() => {
         iFrameResize({
           messageCallback: function (messageData) {
-            console.log('message')
             let name = messageData.name
             let event = new CustomEvent(name, {bubbles: true, cancelable: true})
             document.dispatchEvent(event)
