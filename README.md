@@ -29,43 +29,7 @@ The side integrating the iframe should load the `dist/client.js` provided here.
 ## Usage client.js
 
 ### Use as is
-
 You can simply use the script as is and provide your custom information on initialization
-
-```html
-<your-integration-placement></your-integration-placement>
-<script src="http://example-serving-side.com/dist/client.js"></script>
-<script>
-    window.iframeIntegrationClient.render(
-        {
-            'your_option' : 'someValue',
-            'another_option' : 'anotherValue'
-        },
-        'http://example-serving-side.com/your-iframe-source.html',
-        'your-integration-placement'
-    );
-</script>
-```
-
-### Customize
-
-To change the naming or preset your placement name & url simply modify the `app/client.js` file ( or create your own) and build the application.
-
-### How to build the app
-Simply install all npm dependencies ( including dev dependencies ) and run build.
-
-```bash
-npm install
-npm run build
-```
-if you want to use a different source `client.js` file
-```bash
-npm install
-./node_modules/.bin/webpack app/your-client.js dist/client.js
-```
-`npm install` only needs to be run once of course.
-
-### Asynchronous Usage
 All Names and default values can be changed in the/with a custom `app/client.js` and by simply adapting the script below.  
 ```html
 <your-integration-placement></your-integration-placement>
@@ -89,8 +53,42 @@ All Names and default values can be changed in the/with a custom `app/client.js`
 </script>
 ```
 
-## Things to keep in mind / known limitations
+#### Synchronous Usage
+If you want to use the script synchronously, thats also possibile
 
+```html
+<your-integration-placement></your-integration-placement>
+<script src="http://example-serving-side.com/dist/client.js"></script>
+<script>
+    window.iframeIntegrationClient.render(
+        {
+            'your_option' : 'someValue',
+            'another_option' : 'anotherValue'
+        },
+        'http://example-serving-side.com/your-iframe-source.html',
+        'your-integration-placement'
+    );
+</script>
+```
+
+### Customize
+To change the naming or preset your placement name & url simply modify the `app/client.js` file ( or create your own) and build the application.
+
+### How to build the app
+Simply install all npm dependencies ( including dev dependencies ) and run build.
+
+```bash
+npm install
+npm run build
+```
+if you want to use a different source `client.js` file
+```bash
+npm install
+./node_modules/.bin/webpack app/your-client.js dist/client.js
+```
+`npm install` only needs to be run once of course.
+
+## Things to keep in mind / known limitations
 * the library also allows some event transmission, check the source of `app/IframeIntegrationClient.js` for details
 * both pages must use https *or* http - no mixing
 * the placement element ( `iframe-integration-placement` by default ) always needs to exist before the render method is called 
