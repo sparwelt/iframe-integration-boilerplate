@@ -70,23 +70,20 @@ The Client Script will call a method ( default `iframeIntegrationAsyncInit`) whe
 ```html
 <your-integration-placement></your-integration-placement>
 <script>
-    window.iframeIntegrationAsyncInit = function () {
-        iframeIntegrationClient.render(
-            {
-                'your_option' : 'someValue',
-                'another_option' : 'anotherValue'
-            },
-            'http://example-serving-side.com/your-iframe-source.html',
-            'your-integration-placement'
-        );
-    };
-    (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "http://example-serving-side.com/dist/client.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'swvapp'));
+  (function(w, d, s, i) {
+    var js, cjs = d.getElementsByTagName(s)[0]; if (d.getElementById(i)) return;
+    w.iic=w.iic||function(){(iic.q=iic.q||[]).push(arguments)};iic.l=+new Date;
+    js = d.createElement(s); js.i = i; js.src = "http://example-serving-side.com/dist/client.js"; cjs.parentNode.insertBefore(js, cjs);
+  }(window, document, 'script', 'iic'));
+  // we send some command to the client
+  iic('render', [{
+    'one_option': 'some_value',
+    'another_option': 'another_value'
+  }, 'http://example-serving-side.com/your-iframe-source.html', 'your-integration-placement']);
+  // we get the client
+  iic(function (client) {
+    // we now have the client and can interact with it, no real functionality here as of now
+  });
 </script>
 ```
 

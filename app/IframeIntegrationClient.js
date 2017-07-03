@@ -32,13 +32,13 @@ class IframeIntegrationClient {
     }
   }
 
-  render (options, targetUrl, elementTagName) {
+  render (options = {}, targetUrl, localElementTagName) {
     let ifrm, width, element
 
-    if (isUndefined(elementTagName)) {
+    if (isUndefined(localElementTagName)) {
       element = document.getElementsByTagName(this.elementTagName)[0]
     } else {
-      element = document.getElementsByTagName(elementTagName)[0]
+      element = document.getElementsByTagName(localElementTagName)[0]
     }
     if (isUndefined(element)) {
       console.error(`no matching element for listing was found or provided, place an ${this.elementTagName} on the page before executing the render method or pass an element along as the third parameter`)

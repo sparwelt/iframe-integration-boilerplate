@@ -7,9 +7,9 @@ module.exports = {
     filename: 'client.js',
     path: path.resolve(__dirname, 'dist')
   },
-  plugins: [
-    new UglifyJSPlugin()
-  ],
+  //plugins: [
+  //  new UglifyJSPlugin()
+  //],
   module: {
     loaders: [{
       test: /\.js$/,
