@@ -66,7 +66,7 @@ npm install
 `npm install` only needs to be run once of course.
 
 ### Asynchronous Usage
-The Client Script will call a method ( default `iframeIntegrationAsyncInit`) when it finished loading, allowing Asynchronous Usage, the name can be changed with an custom `app/client.js`  
+All Names and default values can be changed in the/with a custom `app/client.js` and by simply adapting the script below.  
 ```html
 <your-integration-placement></your-integration-placement>
 <script>
