@@ -75,11 +75,13 @@ All Names and default values can be changed in the/with a custom `app/client.js`
     w.iic=w.iic||function(){(iic.q=iic.q||[]).push(arguments)};iic.l=+new Date;
     js = d.createElement(s); js.i = i; js.src = "http://example-serving-side.com/dist/client.js"; cjs.parentNode.insertBefore(js, cjs);
   }(window, document, 'script', 'iic'));
+
   // we send some command to the client
   iic('render', [{
     'one_option': 'some_value',
     'another_option': 'another_value'
   }, 'http://example-serving-side.com/your-iframe-source.html', 'your-integration-placement']);
+
   // we get the client
   iic(function (client) {
     // we now have the client and can interact with it, no real functionality here as of now
