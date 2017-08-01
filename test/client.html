@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>iframe integration boilerplate | client</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>Example Text Styled</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+            <iframe-integration-placement></iframe-integration-placement>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+          <iframe src="third-party.html" style="width: 100%; height: 100px; border: none"></iframe>
+        </div>
+    </div>
+</div>
+<script>
+  (function(w, d, s, i) {
+    var js, cjs = d.getElementsByTagName(s)[0]; if (d.getElementById(i)) return;
+    w.iic=w.iic||function(){(iic.q=iic.q||[]).push(arguments)};iic.l=+new Date;
+    js = d.createElement(s); js.i = i; js.src = "../dist/client.min.js"; cjs.parentNode.insertBefore(js, cjs);
+  }(window, document, 'script', 'iic'));
+
+
+
+  // we send some command to the client
+  iic('render', [{
+    'one_option': 'some_value',
+    'another_option': 'another_value'
+  }, './host.html', 'iframe-integration-placement']);
+
+  /** no event support right now due to some IE bugs **/
+  //  iic('on', 'click.cta', function (event) {
+  //    console.log(event)
+  //  });
+
+  // we get the client
+  iic(function (client) {
+    console.debug(client);
+  });
+</script>
+<!--
+basic boilerplate for simple stand alone pages
+with everything inline in case you don't want or need assets
+@see https://github.com/lautr/HTML-Boilerplate
+-->
+</body>
+</html>

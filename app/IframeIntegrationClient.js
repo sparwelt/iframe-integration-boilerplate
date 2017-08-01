@@ -9,6 +9,7 @@ class IframeIntegrationClient {
   constructor (targetUrl, elementTagName) {
     this.targetUrl = targetUrl
     this.elementTagName = elementTagName
+    this.clientName = 'iframe-resizer'
   }
 
   encodeQueryData (data) {
@@ -32,8 +33,12 @@ class IframeIntegrationClient {
     }
   }
 
+  generateRandomId () {
+    return `${this.clientName}-${Math.random().toString(36).substr(2, 10)}`
+  }
+
   render (options = {}, targetUrl, localElementTagName) {
-    let ifrm, width, element
+    let ifrm, width, element, generatedId = this.generateRandomId()
 
     if (isUndefined(localElementTagName)) {
       element = document.getElementsByTagName(this.elementTagName)[0]
@@ -60,15 +65,30 @@ class IframeIntegrationClient {
       setTimeout(() => {
         iFrameResize({
           messageCallback: function (messageData) {
-            let name = messageData.name
-            let event = new CustomEvent(name, {bubbles: true, cancelable: true})
-            document.dispatchEvent(event)
+          // finish event support here at some point
+          //  let name = messageData.name
+          //  let event = new CustomEvent(name, {bubbles: true, cancelable: true})
+          //  document.dispatchEvent(event)
+          //  // Create the event.
+          //  let event = document.createEvent('Event');
+          //
+          //  // Define that the event name is 'build'.
+          //  event.initEvent(name, true, true);
+          //
+          //  // Listen for the event.
+          //  document.addEventListener('build', function (e) {
+          //    // e.target matches elem
+          //  }, false);
+          //
+          // target can be any Element or other EventTarget.
+          //  elem.dispatchEvent(event);
           }
-        })
+        }, `#${generatedId}`)
       }, 0)
     }
     // assign url & attributes
     ifrm.setAttribute('style', `width: ${width}; border: none`)
+    ifrm.setAttribute('id', generatedId)
     ifrm.setAttribute('scrolling', 'no')
     ifrm.setAttribute('src', this.buildSourceUrl(targetUrl, options))
 

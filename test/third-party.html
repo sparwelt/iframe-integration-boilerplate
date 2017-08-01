@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>iframe integration boilerplate | third party test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>This File is to make sure that the iframe client doesn't interfer with other iframes on the page</h1>
+        </div>
+    </div>
+</div>
+<script>
+  window.addEventListener("message", function () {
+    console.info('this should not have happend - the resizer send information to a third party iframe')
+    console.debug(event)
+  }, false);
+</script>
+<!--
+basic boilerplate for simple stand alone pages
+with everything inline in case you don't want or need assets
+@see https://github.com/lautr/HTML-Boilerplate
+-->
+</body>
+</html>

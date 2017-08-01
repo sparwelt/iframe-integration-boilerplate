@@ -89,6 +89,6 @@ npm install
 `npm install` only needs to be run once of course.
 
 ## Things to keep in mind / known limitations
-* the library also allows some event transmission, check the source of `app/IframeIntegrationClient.js` for details
+* (currently not working due to IE issues) the library also allows some event transmission, check the source of `app/IframeIntegrationClient.js` for details
 * both pages must use https *or* http - no mixing
 * the placement element ( `iframe-integration-placement` by default ) always needs to exist before the render method is called 

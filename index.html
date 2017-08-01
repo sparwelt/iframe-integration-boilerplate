@@ -27,8 +27,11 @@
   (function(w, d, s, i) {
     var js, cjs = d.getElementsByTagName(s)[0]; if (d.getElementById(i)) return;
     w.iic=w.iic||function(){(iic.q=iic.q||[]).push(arguments)};iic.l=+new Date;
-    js = d.createElement(s); js.i = i; js.src = "dist/client.js"; cjs.parentNode.insertBefore(js, cjs);
+    js = d.createElement(s); js.i = i; js.src = "dist/client.min.js"; cjs.parentNode.insertBefore(js, cjs);
   }(window, document, 'script', 'iic'));
+
+
+
   // we send some command to the client
   iic('render', [{
     'one_option': 'some_value',

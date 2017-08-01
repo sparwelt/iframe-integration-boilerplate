@@ -18,7 +18,11 @@ import isUndefined from '../node_modules/lodash-es/isUndefined'
     if (isFunction(method)) {
       method(win[iframeClientName])
     } else {
-      return win[iframeClientName][method].apply(win[iframeClientName], args)
+      if (isFunction(win[iframeClientName][method])) {
+        return win[iframeClientName][method].apply(win[iframeClientName], args)
+      } else {
+        console.debug(`tried to call unknown function "${method}" on iframe client "${iframeClientName}"`)
+      }
     }
   }
   // modern implementation of async client - you can change the name from iic to something else here
