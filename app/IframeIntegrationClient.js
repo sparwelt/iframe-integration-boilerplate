@@ -1,4 +1,3 @@
-/* global CustomEvent */
 import iFrameResize from 'iframe-resizer/js/iframeResizer'
 import isUndefined from 'lodash-es/isUndefined'
 import includes from 'lodash-es/includes'
@@ -38,7 +37,8 @@ class IframeIntegrationClient {
   }
 
   render (options = {}, targetUrl, localElementTagName) {
-    let ifrm, width, element, generatedId = this.generateRandomId()
+    let ifrm, width, element
+    let generatedId = this.generateRandomId()
 
     if (isUndefined(localElementTagName)) {
       element = document.getElementsByTagName(this.elementTagName)[0]

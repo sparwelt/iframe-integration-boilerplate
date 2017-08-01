@@ -5,7 +5,9 @@
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" ",
-    "build": "echo \"Starting Build\" && ./node_modules/.bin/webpack"
+    "build": "echo \"Starting Build\" && ./node_modules/.bin/webpack",
+    "lint": "echo \"Starting Lint\" && ./node_modules/.bin/eslint app/*"
+
   },
   "repository": {
     "type": "git",

@@ -1,1 +1,1 @@
-import iFrameResize from 'iframe-resizer/js/iframeResizer.contentWindow'
+import 'iframe-resizer/js/iframeResizer.contentWindow'

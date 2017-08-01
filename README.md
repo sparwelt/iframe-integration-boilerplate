@@ -16,10 +16,14 @@ It mostly uses & integrates https://github.com/davidjbradshaw/iframe-resizer whi
 
 ### Content Serving side
 
-The side serving the content ( e.g. the one being integrated as iframe ) can simply use the default iframe-resizer contentWindow client as part of its application or via CDN
+The side serving the content ( e.g. the one being integrated as iframe ) can simply use the host
 
 ```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.14/iframeResizer.contentWindow.min.js"></script>
+  (function(w, d, s, i) {
+    var js, cjs = d.getElementsByTagName(s)[0]; if (d.getElementById(i)) return;
+    w.iic=w.iic||function(){(iic.q=iic.q||[]).push(arguments)};iic.l=+new Date;
+    js = d.createElement(s); js.i = i; js.src = "http://example-serving-side.com/dist/host.min.js"; cjs.parentNode.insertBefore(js, cjs);
+  }(window, document, 'script', 'iih'));
 ```
 
 ### Integrating Side
@@ -37,7 +41,7 @@ All Names and default values can be changed in the/with a custom `app/client.js`
   (function(w, d, s, i) {
     var js, cjs = d.getElementsByTagName(s)[0]; if (d.getElementById(i)) return;
     w.iic=w.iic||function(){(iic.q=iic.q||[]).push(arguments)};iic.l=+new Date;
-    js = d.createElement(s); js.i = i; js.src = "http://example-serving-side.com/dist/client.js"; cjs.parentNode.insertBefore(js, cjs);
+    js = d.createElement(s); js.i = i; js.src = "http://example-serving-side.com/dist/client.min.js"; cjs.parentNode.insertBefore(js, cjs);
   }(window, document, 'script', 'iic'));
 
   // we send some command to the client
