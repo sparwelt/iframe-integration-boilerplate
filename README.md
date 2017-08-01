@@ -22,7 +22,7 @@ The side serving the content ( e.g. the one being integrated as iframe ) can sim
 <script>
   (function(w, d, s, i) {
     var js, cjs = d.getElementsByTagName(s)[0]; if (d.getElementById(i)) return;
-    w.iic=w.iic||function(){(iic.q=iic.q||[]).push(arguments)};iic.l=+new Date;
+    w.iih=w.iih||function(){(iih.q=iih.q||[]).push(arguments)};iih.l=+new Date;
     js = d.createElement(s); js.i = i; js.src = "http://example-serving-side.com/dist/host.min.js"; cjs.parentNode.insertBefore(js, cjs);
   }(window, document, 'script', 'iih'));
 </script>

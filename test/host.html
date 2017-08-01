@@ -7,7 +7,13 @@
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" />
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
 </head>
-<script src="../dist/host.min.js"></script>
+<script>
+  (function(w, d, s, i) {
+    var js, cjs = d.getElementsByTagName(s)[0]; if (d.getElementById(i)) return;
+    w.iih=w.iih||function(){(iih.q=iih.q||[]).push(arguments)};iih.l=+new Date;
+    js = d.createElement(s); js.i = i; js.src = "../dist/host.min.js"; cjs.parentNode.insertBefore(js, cjs);
+  }(window, document, 'script', 'iih'));
+</script>
 <body>
 
 <div class="container-fluid">
