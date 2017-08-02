@@ -1,13 +1,12 @@
 {
-  "name": "iframe-integration-boilerplate",
-  "version": "1.0.0",
+  "name": "@sparwelt/iframe-integration-boilerplate",
+  "version": "1.1.0",
   "description": "This is a boilerplate you can use if you want to dynamically include an iframe to provide some kind of service or widget",
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" ",
     "build": "echo \"Starting Build\" && ./node_modules/.bin/webpack",
     "lint": "echo \"Starting Lint\" && ./node_modules/.bin/eslint app/*"
-
   },
   "repository": {
     "type": "git",
@@ -21,7 +20,8 @@
   "homepage": "https://github.com/lautr/iframe-integration-boilerplate#readme",
   "dependencies": {
     "iframe-resizer": "^3.5.14",
-    "lodash-es": "^4.17.4"
+    "lodash-es": "^4.17.4",
+    "travis": "^0.1.1"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

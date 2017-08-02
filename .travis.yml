@@ -9,3 +9,9 @@ install:
   - npm install
   - npm run build
   - ./node_modules/.bin/eslint app/*
+deploy:
+  provider: npm
+  email: abs-saas@sparwelt.de
+  api_key: $NPM_TOKEN
+  on:
+    all_branches: true
