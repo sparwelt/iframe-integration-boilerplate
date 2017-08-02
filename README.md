@@ -1,5 +1,7 @@
 # iframe-integration-boilerplate
 [![Build Status](https://api.travis-ci.org/sparwelt/iframe-integration-boilerplate.png?branch=master)](https://travis-ci.org/sparwelt/iframe-integration-boilerplate)
+[![NPM Version](https://badge.fury.io/js/%40sparwelt%2Fiframe-integration-boilerplate.svg)](https://www.npmjs.com/package/@sparwelt/iframe-integration-boilerplate)
+
 
 This is a boilerplate you can use if you want to dynamically include an iframe to provide some kind of service or widget.
 
@@ -16,7 +18,7 @@ It mostly uses & integrates https://github.com/davidjbradshaw/iframe-resizer whi
 
 ### Content Serving side
 
-The side serving the content ( e.g. the one being integrated as iframe ) can simply use the host
+The side serving the content ( e.g. the one being integrated as iframe ) can simply use the `dist/host.min.js` file
 
 ```html
 <script>
@@ -30,7 +32,7 @@ The side serving the content ( e.g. the one being integrated as iframe ) can sim
 
 ### Integrating Side
 
-The side integrating the iframe should load the `dist/client.js` provided here.
+The side integrating the iframe should load the `dist/client.min.js` provided here.
 
 ## Usage client.js
 
