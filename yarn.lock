@@ -616,7 +616,7 @@ babel-register@^6.24.1:
     mkdirp "^0.5.1"
     source-map-support "^0.4.2"
 
-babel-runtime@^6.18.0, babel-runtime@^6.22.0:
+babel-runtime@^6.18.0, babel-runtime@^6.22.0, babel-runtime@^6.23.0:
   version "6.23.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.23.0.tgz#0a9489f144de70efb3ce4300accdb329e2fc543b"
   dependencies:
@@ -1100,6 +1100,12 @@ ecc-jsbn@~0.1.1:
 electron-to-chromium@^1.3.14:
   version "1.3.15"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.15.tgz#08397934891cbcfaebbd18b82a95b5a481138369"
+
+element-dataset@^2.2.6:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/element-dataset/-/element-dataset-2.2.6.tgz#a4e46dbb3ee991e8c7d5366ec654f87670c2ef80"
+  dependencies:
+    babel-runtime "^6.23.0"
 
 elliptic@^6.0.0:
   version "6.4.0"
@@ -2912,10 +2918,6 @@ tough-cookie@~2.3.0:
   resolved "https://registry.yarnpkg.com/tough-cookie/-/tough-cookie-2.3.2.tgz#f081f76e4c85720e6c37a5faced737150d84072a"
   dependencies:
     punycode "^1.4.1"
-
-travis@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/travis/-/travis-0.1.1.tgz#80fe1c36f6f3b739fce07e6063838ce436357d60"
 
 trim-right@^1.0.1:
   version "1.0.1"

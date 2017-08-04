@@ -2,69 +2,10 @@
 <html>
 <head>
     <title>My Little Boilerplate</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
 </head>
 <body>
-
-<div class="container">
-    <div class="row">
-        <iframe-integration-placement></iframe-integration-placement>
-    </div>
-</div>
-<!-- synchronous usage -->
-<!--<script src="dist/client.js"></script>-->
-<!--<script>-->
-    <!--window.iframeIntegrationClient.render({-->
-      <!--'one_option' : 'some_value',-->
-      <!--'another_option' : 'another_value'-->
-    <!--});-->
-<!--</script>-->
-<!-- asynchronous usage -->
 <script>
-  (function(w, d, s, i) {
-    var js, cjs = d.getElementsByTagName(s)[0]; if (d.getElementById(i)) return;
-    w.iic=w.iic||function(){(iic.q=iic.q||[]).push(arguments)};iic.l=+new Date;
-    js = d.createElement(s); js.i = i; js.src = "dist/client.min.js"; cjs.parentNode.insertBefore(js, cjs);
-  }(window, document, 'script', 'iic'));
-
-
-
-  // we send some command to the client
-  iic('render', [{
-    'one_option': 'some_value',
-    'another_option': 'another_value'
-  }, 'http://davidjbradshaw.com/iframe-resizer/example/frame.content.html', 'iframe-integration-placement']);
-  // we get the client
-  iic(function (client) {
-    console.debug(client);
-  });
+    window.location = 'test/client.html'
 </script>
-<!--<script>-->
-  <!--window.iframeIntegrationAsyncInit = function (client) {-->
-    <!--client.render(-->
-      <!--{-->
-        <!--'your_option' : 'someValue',-->
-        <!--'another_option' : 'anotherValue'-->
-      <!--},-->
-      <!--'http://davidjbradshaw.com/iframe-resizer/example/frame.content.html',-->
-      <!--'iframe-integration-placement'-->
-    <!--);-->
-  <!--};-->
-  <!--(function(d, s, id) {-->
-    <!--var js, fjs = d.getElementsByTagName(s)[0];-->
-    <!--if (d.getElementById(id)) return;-->
-    <!--js = d.createElement(s); js.id = id;-->
-    <!--js.src = "dist/client.js";-->
-    <!--fjs.parentNode.insertBefore(js, fjs);-->
-  <!--}(document, 'script', 'swvapp'));-->
-<!--</script>-->
-<!--
-basic boilerplate for simple stand alone pages
-with everything inline in case you don't want or need assets
-@see https://github.com/lautr/HTML-Boilerplate
--->
 </body>
 </html>

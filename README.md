@@ -52,13 +52,27 @@ All Names and default values can be changed in the/with a custom `app/client.js`
   iic('render', [{
     'one_option': 'some_value',
     'another_option': 'another_value'
-  }, 'http://example-serving-side.com/your-iframe-source.html', 'your-integration-placement']);
+  }, {
+    targetUrl: 'http://example-serving-side.com/your-iframe-source.html',
+    localElementTagName: 'iframe-integration-placement'
+  }]);
 
   // we get the client
   iic(function (client) {
     // we now have the client and can interact with it, no real functionality here as of now
   });
 </script>
+```
+#### Methods
+```javascript
+/**
+* @var object parameters  list of parameters passed via get to the target page
+* @var object settings    list of settings about the workings of the iframe, all those default values can be set so this is for overriding & testing
+*                         - targetUrl           what base url to load in the iframe
+*                         - localElementTagName css selector of the element to transform
+*                         - width               with of the element - default 100%
+*/
+render([{parameters}], [{settings}]);
 ```
 
 #### Synchronous Usage
@@ -72,9 +86,10 @@ If you want to use the script synchronously, thats also possibile
         {
             'your_option' : 'someValue',
             'another_option' : 'anotherValue'
-        },
-        'http://example-serving-side.com/your-iframe-source.html',
-        'your-integration-placement'
+        }, {
+            targetUrl: 'http://example-serving-side.com/your-iframe-source.html',
+            localElementTagName: 'iframe-integration-placement'
+        }
     );
 </script>
 ```
@@ -100,3 +115,9 @@ npm install
 * (currently not working due to IE issues) the library also allows some event transmission, check the source of `app/IframeIntegrationClient.js` for details
 * both pages must use https *or* http - no mixing
 * the placement element ( `iframe-integration-placement` by default ) always needs to exist before the render method is called 
+
+## Browser Support
+
+Chrome|Firefox|IE|Opera|Safari
+--- | --- | --- | --- | --- |
+Latest|Latest|9+|Latest|6.1+|

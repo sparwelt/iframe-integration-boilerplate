@@ -11,13 +11,25 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-12">
-            <h1>Example Text Styled</h1>
+        <div class="col-sm-10 col-sm-offset-1">
+            <h1>Example Client Page</h1>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-10 col-sm-offset-1">
-            <iframe-integration-placement></iframe-integration-placement>
+            <form>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="type here to submit data to the host" />
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="data transmitted by the host" disabled />
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+            <iframe-integration-placement data-one-more-option="some value"></iframe-integration-placement>
         </div>
     </div>
     <div class="row">
@@ -34,12 +46,14 @@
   }(window, document, 'script', 'iic'));
 
 
-
   // we send some command to the client
   iic('render', [{
-    'one_option': 'some_value',
-    'another_option': 'another_value'
-  }, './host.html', 'iframe-integration-placement']);
+    one_option: 'some_value',
+    another_option: 'another_value'
+  }, {
+    targetUrl: './host.html',
+    localElementTagName: 'iframe-integration-placement'
+  }]);
 
   /** no event support right now due to some IE bugs **/
   //  iic('on', 'click.cta', function (event) {
