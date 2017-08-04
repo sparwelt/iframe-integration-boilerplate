@@ -20,7 +20,6 @@ class IframeIntegrationClient {
       log: false,
       autoResize: true,
       scrolling: false,
-      tolerance: 10,
       width: '100%'
     }
 
@@ -128,7 +127,7 @@ class IframeIntegrationClient {
     ifrm.setAttribute('scrolling', settings.scrolling ? 'yes' : 'no')
 
     /**
-     * on load we will start theasynchronous initialization of the iframe resizer
+     * on load we will start the asynchronous initialization of the iframe resizer
      * plugin, we also remove internal parameters from the settings array and
      * just hand it over
      */
