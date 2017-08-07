@@ -103,7 +103,8 @@ npm install
 ## Things to keep in mind / known limitations
 * (currently not working due to IE issues) the library also allows some event transmission, check the source of `app/IframeIntegrationClient.js` for details
 * both pages must use https *or* http - no mixing
-* the placement element ( `iframe-integration-placement` by default ) always needs to exist before the render method is called 
+* the placement element ( `iframe-integration-placement` by default ) always needs to exist before the render method is called
+* the iframe resizing event is first firedt after the host document finished loading, so optimize this page for an early `Load` event 
 
 ## Browser Support
 

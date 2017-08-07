@@ -6,14 +6,15 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" />
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+      (function(w, d, s, i) {
+        var js, cjs = d.getElementsByTagName(s)[0]; if (d.getElementById(i)) return;
+        w.iih=w.iih||function(){(iih.q=iih.q||[]).push(arguments)};iih.l=+new Date;
+        js = d.createElement(s); js.i = i; js.src = "../dist/host.min.js"; cjs.parentNode.insertBefore(js, cjs);
+      }(window, document, 'script', 'iih'));
+    </script>
 </head>
-<script>
-  (function(w, d, s, i) {
-    var js, cjs = d.getElementsByTagName(s)[0]; if (d.getElementById(i)) return;
-    w.iih=w.iih||function(){(iih.q=iih.q||[]).push(arguments)};iih.l=+new Date;
-    js = d.createElement(s); js.i = i; js.src = "../dist/host.min.js"; cjs.parentNode.insertBefore(js, cjs);
-  }(window, document, 'script', 'iih'));
-</script>
 <body>
 
 <div class="container-fluid">
@@ -34,10 +35,10 @@
             <div class="col-sm-10 col-sm-offset-1">
                 <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="type here to submit data to the client" />
+                        <input type="text" class="form-control" id="client-source" placeholder="type here to submit data to the client" />
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="data transmitted by the client" disabled />
+                        <input type="text" class="form-control" id="client-target" placeholder="data transmitted by the client" disabled />
                     </div>
                 </form>
             </div>
@@ -73,6 +74,14 @@
     </footer>
 
 </div>
+<script>
+  $('#client-source').keydown(function () {
+    iih('trigger', ['value.changed', {content: $('#client-source').val()}])
+  })
+  iih(function (client) {
+    console.debug(client.getParameters().get('one_option'))
+  })
+</script>
 <!--
 basic boilerplate for simple stand alone pages
 with everything inline in case you don't want or need assets

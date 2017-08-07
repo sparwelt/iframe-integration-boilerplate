@@ -7,35 +7,40 @@ import isEmpty from 'lodash-es/isEmpty'
 import isString from 'lodash-es/isString'
 import assign from 'lodash-es/assign'
 import omit from 'lodash-es/omit'
+import filter from 'lodash-es/filter'
+import forEach from 'lodash-es/forEach'
 
 /**
  * @TODO merge elementTageName usage with settings
  */
 class IframeIntegrationClient {
-  constructor (settingsOrTargetUrl, elementTagName, clientName = 'iframe-resizer') {
-    this.elementTagName = elementTagName
+  /**
+   * constructor
+   *
+   * @param settings
+   * @param clientName
+   */
+  constructor (settings, clientName = 'iframe-resizer') {
+    this.eventHandlers = []
     this.clientName = clientName
     this.iFrameResize = iFrameResize
     this.defaultSettings = {
       log: false,
       autoResize: true,
       scrolling: false,
-      width: '100%'
+      width: '100%',
+      cssSelector: 'iframe-integration-placement'
     }
 
-    /**
-     * backwards compatibility
-     * @deprecated 2.0
-     */
-    if (isString(settingsOrTargetUrl)) {
-      this.defaultSettings = assign({}, this.defaultSettings, {
-        targetUrl: settingsOrTargetUrl
-      })
-    } else {
-      this.defaultSettings = assign({}, this.defaultSettings, settingsOrTargetUrl)
-    }
+    this.defaultSettings = assign({}, this.defaultSettings, settings)
   }
 
+  /**
+   * creates query from dataset
+   *
+   * @param data
+   * @returns {string}
+   */
   encodeQueryData (data) {
     let ret = []
     for (let d in data) {
@@ -66,84 +71,109 @@ class IframeIntegrationClient {
     }
   }
 
+  /**
+   * returns a random id to be used for the iframe
+   *
+   * @returns {string}
+   */
   generateRandomId () {
     return `${this.clientName}-${Math.random().toString(36).substr(2, 10)}`
   }
 
+  /**
+   * generates a full set of parameters by what was passed on the call and whats
+   * present on the element itself as data-* attributes
+   *
+   * @param parameters
+   * @param element
+   * @returns {*}
+   */
   getFullParameters (parameters, element) {
-    assign(parameters, element.dataset)
-
-    return parameters
+    return assign(parameters, element.dataset)
   }
 
-  getFullSettings (settingsOrTargetUrl, localElementTagName = null) {
-    let settings
-
-    /**
-     * backwards compatibility
-     * @deprecated 2.0
-     */
-    if (isString(settingsOrTargetUrl)) {
-      settings = {
-        targetUrl: settingsOrTargetUrl,
-        localElementTagName: localElementTagName
-      }
-    } else {
-      settings = settingsOrTargetUrl
-      if (isUndefined(settings.localElementTagName)) {
-        settings.localElementTagName = localElementTagName
-      }
-    }
-
-    settings = assign({}, this.defaultSettings, settings)
-
-    return settings
+  /**
+   * returns settings object based on default and local settings
+   *
+   * @param settings
+   * @returns {*}
+   */
+  getFullSettings (settings) {
+    return assign({}, this.defaultSettings, settings)
   }
 
-  getElement (localElementTagName) {
-    let element
-    let usableElementTagName = (!isUndefined(localElementTagName) ? localElementTagName : this.elementTagName)
-
-    element = document.getElementsByTagName(usableElementTagName)[0]
+  /**
+   * gets the element to replace with an iframe
+   *
+   * @param localElementTagName
+   * @returns {*}
+   */
+  getElement (cssSelector) {
+    let element = document.getElementsByTagName(cssSelector)[0]
 
     if (isUndefined(element)) {
-      throw new Error(`no matching element for listing was found or provided, place an ${usableElementTagName} on the page before executing the render method or pass an element along as the third parameter`)
+      throw new Error(`no matching element for listing was found or provided, place an ${cssSelector} on the page before executing the render method or pass an element along as the third parameter`)
     } else {
       return element
     }
   }
 
-  render (parameters = {}, settingsOrTargetUrl = {}, localElementTagName = null) {
-    let ifrm
-    let generatedId = this.generateRandomId()
-    let settings = this.getFullSettings(settingsOrTargetUrl, localElementTagName)
-    let element = this.getElement(settings.localElementTagName)
+  /**
+   * registers an event handler
+   *
+   * @param eventName
+   * @param eventCallback
+   */
+  on (eventName, eventCallback) {
+    this.eventHandlers.push({
+      name: eventName,
+      callback: eventCallback
+    })
+  }
 
-    ifrm = document.createElement('iframe')
+  /**
+   * renders the iframe into the page and handles all related logic
+   *
+   * @param parameters
+   * @param settingsOrTargetUrl
+   * @param localElementTagName
+   * @returns {Node}
+   */
+  render (parameters = {}, settingsOrTargetUrl = {}, localElementTagName = null) {
+    let iframe = document.createElement('iframe')
+    let generatedId = this.generateRandomId()
+    let settings = this.getFullSettings(settingsOrTargetUrl)
+    let element = this.getElement(settings.cssSelector)
 
     // assign url & attributes
-    ifrm.setAttribute('style', `width: ${settings.width}; border: none`)
-    ifrm.setAttribute('id', generatedId)
-    ifrm.setAttribute('scrolling', settings.scrolling ? 'yes' : 'no')
+    iframe.setAttribute('style', `width: ${settings.width}; border: none`)
+    iframe.setAttribute('id', generatedId)
+    iframe.setAttribute('scrolling', settings.scrolling ? 'yes' : 'no')
 
     /**
      * on load we will start the asynchronous initialization of the iframe resizer
      * plugin, we also remove internal parameters from the settings array and
      * just hand it over
      */
-    ifrm.onload = () => {
+    iframe.onload = () => {
       setTimeout(() => {
-        iFrameResize(omit(settings, ['width', 'targetUrl', 'scrolling', 'localElementTagName']), `#${generatedId}`)
+        iFrameResize(assign({}, omit(settings, ['width', 'targetUrl', 'scrolling', 'localElementTagName']), {
+          messageCallback: (data) => {
+            forEach(filter(this.eventHandlers, {name: data.message.name}), (handler) => {
+              handler.callback(data.message.data, data.message.name, data.iframe)
+            })
+          }
+        }), `#${generatedId}`)
       }, 0)
     }
 
-    ifrm.setAttribute('src', this.buildSourceUrl(
+    iframe.setAttribute('src', this.buildSourceUrl(
       settings.targetUrl,
       this.getFullParameters(parameters, element),
       element
     ))
 
-    return element.parentNode.replaceChild(ifrm, element)
+    return element.parentNode.replaceChild(iframe, element)
   }
 }
 

@@ -21,7 +21,8 @@
   "dependencies": {
     "element-dataset": "^2.2.6",
     "iframe-resizer": "^3.5.14",
-    "lodash-es": "^4.17.4"
+    "lodash-es": "^4.17.4",
+    "url-search-params-polyfill": "^2.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

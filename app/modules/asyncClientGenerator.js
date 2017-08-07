@@ -1,37 +1,34 @@
 import isFunction from 'lodash-es/isFunction'
 import isUndefined from 'lodash-es/isUndefined'
 
-let asyncClient = function (win, Client, iframeClientName, asyncIframeClientName, asyncCallbackName, settingsOrTargetUrl, targetElementName) {
-  win[iframeClientName] = new Client(
-    settingsOrTargetUrl,
-    targetElementName,
-    iframeClientName
+let asyncClient = function (win, Client, serviceName, asyncServiceName, settings) {
+  win[serviceName] = new Client(
+    settings,
+    serviceName
   )
-
-  // old school type of async usage
-  if (typeof win[asyncCallbackName] !== 'undefined') {
-    win[asyncCallbackName](win[iframeClientName])
-  }
 
   let applyCall = (method, args) => {
     if (isFunction(method)) {
-      method(win[iframeClientName])
+      method(win[serviceName])
     } else {
-      if (isFunction(win[iframeClientName][method])) {
-        return win[iframeClientName][method].apply(win[iframeClientName], args)
+      if ('on' === method) {
+        return win[serviceName].on(args[0], args[1])
+      } else if (isFunction(win[serviceName][method])) {
+        return win[serviceName][method].apply(win[serviceName], args)
       } else {
-        console.debug(`tried to call unknown function "${method}" on iframe client "${iframeClientName}"`)
+        console.debug(`tried to call unknown function "${method}" on client "${serviceName}"`)
       }
     }
   }
+
   // modern implementation of async client - you can change the name from iic to something else here
   // also change it on the implementation side
-  if (!isUndefined(win[asyncIframeClientName]) && !isUndefined(win[asyncIframeClientName].q)) {
-    win[asyncIframeClientName].q.forEach((call) => {
+  if (!isUndefined(win[asyncServiceName]) && !isUndefined(win[asyncServiceName].q)) {
+    win[asyncServiceName].q.forEach((call) => {
       applyCall(call[0], call[1])
     })
   }
-  win[asyncIframeClientName] = (method, args) => {
+  win[asyncServiceName] = (method, args) => {
     return applyCall(method, args)
   }
 }
