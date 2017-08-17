@@ -76,8 +76,11 @@
 </div>
 <script>
   $('#client-source').keydown(function () {
-    iih('trigger', ['value.changed', {content: $('#client-source').val()}])
+    iih('emit', ['value.changed', {content: $('#client-source').val()}])
   })
+  iih('on', ['value.changed', function (data, name, iframe) {
+    $('#client-target').val(data.content)
+  }]);
   iih(function (client) {
     console.debug(client.getParameters().get('one_option'))
   })

@@ -28,7 +28,10 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-10 col-sm-offset-1">
+        <div class="col-sm-5 col-sm-offset-1">
+            <iframe-integration-placement data-one-more-option="some value"></iframe-integration-placement>
+        </div>
+        <div class="col-sm-5 col-sm-offset-1">
             <iframe-integration-placement data-one-more-option="some value"></iframe-integration-placement>
         </div>
     </div>
@@ -58,10 +61,12 @@
   iic('on', ['value.changed', function (data, name, iframe) {
     $('#host-target').val(data.content)
   }]);
-
+  $('#host-source').keydown(function () {
+    iic('emit', ['value.changed', {content: $('#host-source').val()}])
+  })
   // we get the client
   iic(function (client) {
-//    console.debug(client);
+    console.debug(client);
   });
 </script>
 <!--

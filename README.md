@@ -16,7 +16,7 @@ It mostly uses & integrates https://github.com/davidjbradshaw/iframe-resizer whi
 
 ## Integration
 
-### Content Serving side
+### Content Serving side - host.js
 
 The side serving the content ( e.g. the one being integrated as iframe ) can simply use the `dist/host.min.js` file
 
@@ -29,6 +29,9 @@ The side serving the content ( e.g. the one being integrated as iframe ) can sim
   }(window, document, 'script', 'iih'));
 </script>
 ```
+#### Methods
+
+#### Properties
 
 ### Integrating Side - client.js
 
@@ -83,6 +86,38 @@ render({parameters}, {settings});
 iFrameResize
 ```
 
+#### Events ( Host & Client )
+```javascript
+/**
+ * binds a listener (callback) to a given event
+ *  
+ * @var string   eventName  name of the event to be listened on
+ * @var callback callback   callback that is triggered when event happens
+ *                          - data    data send to the event
+ *                          - name    name of the event ( same as eventName )
+ *                          - iframe  iframe the event was send from
+ **/
+iic('on', [eventName, callback(data, name, iframe)])
+
+/**
+ * fires an event
+ * 
+ * @var string  eventName name of the event being emitted/fired
+ * @var mixed   data send for the event
+ **/
+iic('emit', [eventName, data])
+```
+##### Example
+```javascript
+  // on client side, use iih on host side  
+  iic('on', ['value.changed', function (data, name, iframe) {
+    console.log(data.content)
+  }]);
+  […]
+  // on host side, use iic on client side
+  iih('emit', ['value.changed', {content: 'some value'}])
+```
+
 #### Customize
 To change the naming or preset your placement name & url simply modify the `app/client.js` file ( or create your own) and build the application.
 
@@ -101,7 +136,7 @@ npm install
 `npm install` only needs to be run once of course.
 
 ## Things to keep in mind / known limitations
-* (currently not working due to IE issues) the library also allows some event transmission, check the source of `app/IframeIntegrationClient.js` for details
+* event system currently does not support separation of multiple host iframes inside one client page (events are always send to all hosts)
 * both pages must use https *or* http - no mixing
 * the placement element ( `iframe-integration-placement` by default ) always needs to exist before the render method is called
 * the iframe resizing event is first firedt after the host document finished loading, so optimize this page for an early `Load` event 

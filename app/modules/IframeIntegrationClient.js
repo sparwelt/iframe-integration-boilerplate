@@ -1,18 +1,15 @@
-import 'element-dataset/lib/browser/index.es'
 import iFrameResize from 'iframe-resizer/js/iframeResizer'
 import isUndefined from 'lodash-es/isUndefined'
 import includes from 'lodash-es/includes'
 import endsWith from 'lodash-es/endsWith'
 import isEmpty from 'lodash-es/isEmpty'
-import isString from 'lodash-es/isString'
 import assign from 'lodash-es/assign'
 import omit from 'lodash-es/omit'
-import filter from 'lodash-es/filter'
+import eventEmitter from './eventEmitter'
 import forEach from 'lodash-es/forEach'
+import 'element-dataset/lib/browser/index.es'
 
-/**
- * @TODO merge elementTageName usage with settings
- */
+@eventEmitter
 class IframeIntegrationClient {
   /**
    * constructor
@@ -21,9 +18,9 @@ class IframeIntegrationClient {
    * @param clientName
    */
   constructor (settings, clientName = 'iframe-resizer') {
-    this.eventHandlers = []
     this.clientName = clientName
     this.iFrameResize = iFrameResize
+    this.active = false
     this.defaultSettings = {
       log: false,
       autoResize: true,
@@ -31,7 +28,17 @@ class IframeIntegrationClient {
       width: '100%',
       cssSelector: 'iframe-integration-placement'
     }
-
+    this.eventEmitSendCallback = (payload) => {
+      // we kinda need the iframe selector here
+      forEach(document.querySelectorAll('iframe'), (element) => {
+        if (!isUndefined(element.iFrameResizer)) {
+          element.iFrameResizer.sendMessage(payload)
+        }
+      })
+    }
+    this.eventEmitReadyCallback = () => {
+      return this.active
+    }
     this.defaultSettings = assign({}, this.defaultSettings, settings)
   }
 
@@ -105,75 +112,64 @@ class IframeIntegrationClient {
   /**
    * gets the element to replace with an iframe
    *
-   * @param localElementTagName
+   * @param cssSelector
    * @returns {*}
    */
-  getElement (cssSelector) {
-    let element = document.getElementsByTagName(cssSelector)[0]
+  getElements (cssSelector) {
+    let elements = document.querySelectorAll(cssSelector)
 
-    if (isUndefined(element)) {
+    if (isUndefined(elements)) {
       throw new Error(`no matching element for listing was found or provided, place an ${cssSelector} on the page before executing the render method or pass an element along as the third parameter`)
     } else {
-      return element
+      return elements
     }
-  }
-
-  /**
-   * registers an event handler
-   *
-   * @param eventName
-   * @param eventCallback
-   */
-  on (eventName, eventCallback) {
-    this.eventHandlers.push({
-      name: eventName,
-      callback: eventCallback
-    })
   }
 
   /**
    * renders the iframe into the page and handles all related logic
    *
    * @param parameters
-   * @param settingsOrTargetUrl
-   * @param localElementTagName
+   * @param settings
    * @returns {Node}
    */
-  render (parameters = {}, settingsOrTargetUrl = {}, localElementTagName = null) {
-    let iframe = document.createElement('iframe')
-    let generatedId = this.generateRandomId()
-    let settings = this.getFullSettings(settingsOrTargetUrl)
-    let element = this.getElement(settings.cssSelector)
+  render (parameters = {}, settings = {}) {
+    settings = this.getFullSettings(settings)
 
-    // assign url & attributes
-    iframe.setAttribute('style', `width: ${settings.width}; border: none`)
-    iframe.setAttribute('id', generatedId)
-    iframe.setAttribute('scrolling', settings.scrolling ? 'yes' : 'no')
+    forEach(this.getElements(settings.cssSelector), (element) => {
+      let generatedId = this.generateRandomId()
+      let iframe = document.createElement('iframe')
 
-    /**
-     * on load we will start the asynchronous initialization of the iframe resizer
-     * plugin, we also remove internal parameters from the settings array and
-     * just hand it over
-     */
-    iframe.onload = () => {
-      setTimeout(() => {
-        iFrameResize(assign({}, omit(settings, ['width', 'targetUrl', 'scrolling', 'localElementTagName']), {
-          messageCallback: (data) => {
-            forEach(filter(this.eventHandlers, {name: data.message.name}), (handler) => {
-              handler.callback(data.message.data, data.message.name, data.iframe)
-            })
-          }
-        }), `#${generatedId}`)
-      }, 0)
-    }
+      // assign url & attributes
+      iframe.setAttribute('style', `width: ${settings.width}; border: none`)
+      iframe.setAttribute('id', generatedId)
+      iframe.setAttribute('scrolling', settings.scrolling ? 'yes' : 'no')
 
-    iframe.setAttribute('src', this.buildSourceUrl(
-      settings.targetUrl,
-      this.getFullParameters(parameters, element),
-      element
-    ))
+      /**
+       * on load we will start the asynchronous initialization of the iframe resizer
+       * plugin, we also remove internal parameters from the settings array and
+       * just hand it over
+       */
+      iframe.onload = () => {
+        setTimeout(() => {
+          iFrameResize(assign({}, omit(settings, ['width', 'targetUrl', 'scrolling', 'cssSelector']), {
+            messageCallback: (data) => {
+              this.receive(data.message.name, [data.message.data, data.message.name, data.iframe])
+            },
+            initCallback: () => {
+              this.active = true
+            }
+          }), `#${generatedId}`)
+        }, 0)
+      }
 
-    return element.parentNode.replaceChild(iframe, element)
+      iframe.setAttribute('src', this.buildSourceUrl(
+        settings.targetUrl,
+        this.getFullParameters(parameters, element),
+        element
+      ))
+
+      element.parentNode.replaceChild(iframe, element)
+    })
   }
 }
 

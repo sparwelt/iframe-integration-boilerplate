@@ -1,26 +1,29 @@
 /* global window, URLSearchParams */
 import assign from 'lodash-es/assign'
 import isObject from 'lodash-es/isObject'
-import forEach from 'lodash-es/forEach'
+import eventEmitter from './eventEmitter'
 import 'url-search-params-polyfill'
 import 'iframe-resizer/js/iframeResizer.contentWindow'
 
+@eventEmitter
 class IframeIntegrationHost {
   constructor (settings = {}) {
     this.eventQueue = []
     this.defaultSettings = {
       readyCallback: () => {
-        this.activate()
+        this.emitStoredEvents()
+      },
+      messageCallback: (data) => {
+        this.receive(data.name, [data.data, data.name])
       }
     }
-
+    this.eventEmitSendCallback = (payload) => {
+      window.parentIFrame.sendMessage(payload)
+    }
+    this.eventEmitReadyCallback = () => {
+      return isObject(window.parentIFrame)
+    }
     this.setUp(settings)
-  }
-
-  activate () {
-    forEach(this.eventQueue, (event) => {
-      this.trigger(event.name, event.data)
-    })
   }
 
   setUp (settings) {
@@ -29,14 +32,6 @@ class IframeIntegrationHost {
 
   getParameters () {
     return new URLSearchParams(window.location.search)
-  }
-
-  trigger (name, data) {
-    if (isObject(window.parentIFrame)) {
-      window.parentIFrame.sendMessage({'name': name, 'data': data})
-    } else {
-      this.eventQueue.push({'name': name, 'data': data})
-    }
   }
 }
 

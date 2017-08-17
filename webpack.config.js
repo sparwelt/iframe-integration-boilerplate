@@ -1,5 +1,6 @@
-const path = require('path');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const path = require('path')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const webpack = require('webpack')
 
 module.exports = {
   entry: {
@@ -11,7 +12,8 @@ module.exports = {
     path: path.resolve(__dirname, 'dist')
   },
   plugins: [
-    new UglifyJSPlugin()
+    new webpack.optimize.ModuleConcatenationPlugin(),
+    //new UglifyJSPlugin()
   ],
   module: {
     loaders: [{
@@ -19,7 +21,10 @@ module.exports = {
       exclude: /node_modules/,
       loader: 'babel-loader',
       query: {
-        presets: ['es2015']
+        presets: ['es2015'],
+        plugins: [
+          ['transform-decorators-legacy']
+        ]
       }
     }]
   }
