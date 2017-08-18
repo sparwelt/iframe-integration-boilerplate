@@ -1,3 +1,5 @@
+/* global CustomEvent, document */
+
 import forEach from 'lodash-es/forEach'
 import filter from 'lodash-es/filter'
 import 'custom-event-polyfill'
@@ -28,7 +30,7 @@ function eventEmitter (target) {
       this.emit(true, event)
     })
   }
-  target.prototype.sendCustomEvent = function(name, data) {
+  target.prototype.sendCustomEvent = function (name, data) {
     document.dispatchEvent(new CustomEvent(name, {detail: data}))
   }
 

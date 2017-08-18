@@ -12,7 +12,6 @@ import 'element-dataset/lib/browser/index.es'
 
 @eventEmitter
 class IframeIntegrationClient {
-
   /**
    * constructor
    *
@@ -30,6 +29,7 @@ class IframeIntegrationClient {
       width: '100%',
       cssSelector: 'iframe-integration-placement'
     }
+
     this.settings = assign({}, this.defaultSettings, configuredSettings)
 
     this.eventEmitSendCallback = (payload) => {
@@ -53,12 +53,12 @@ class IframeIntegrationClient {
    */
   encodeQueryData (data) {
     return Object.keys(data).map((k) => {
-        // we have an object, we gonna json-stringifiy it
-        if (isObject(data[k])) {
-            data[k] = JSON.stringify(data[k])
-        }
-        return `${encodeURIComponent(k)}=${encodeURIComponent(data[k])}`
-    }).join('&');
+      // we have an object, we gonna json-stringifiy it
+      if (isObject(data[k])) {
+        data[k] = JSON.stringify(data[k])
+      }
+      return `${encodeURIComponent(k)}=${encodeURIComponent(data[k])}`
+    }).join('&')
   }
 
   /**

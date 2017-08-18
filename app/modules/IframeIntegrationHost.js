@@ -28,7 +28,7 @@ class IframeIntegrationHost {
   }
 
   setUp (settings) {
-      window.iFrameResizer = assign({}, this.defaultSettings, settings)
+    window.iFrameResizer = assign({}, this.defaultSettings, settings)
   }
 
   /**
@@ -39,7 +39,7 @@ class IframeIntegrationHost {
    * @returns {*}
    */
   get (parameterName, fallback = null) {
-    let parameterValue = fallback;
+    let parameterValue = fallback
     if (this.getParameters().has(parameterName)) {
       if (1 === this.getParameters().getAll(parameterName).length) {
         parameterValue = this.getParameters().getAll(parameterName)[0]
@@ -49,11 +49,10 @@ class IframeIntegrationHost {
     }
 
     try {
-        return JSON.parse(parameterValue);
+      return JSON.parse(parameterValue)
     } catch (e) {
-        return parameterValue;
+      return parameterValue
     }
-
   }
 
   getParameters () {
