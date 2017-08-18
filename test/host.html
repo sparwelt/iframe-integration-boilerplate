@@ -75,6 +75,11 @@
 
 </div>
 <script>
+    document.addEventListener("value.changed", function (data, name) {
+        console.log('native event fired')
+        console.log(data, name)
+    })
+
   $('#client-source').keydown(function () {
     iih('emit', ['value.changed', {content: $('#client-source').val()}])
   })
@@ -82,7 +87,11 @@
     $('#client-target').val(data.content)
   }]);
   iih(function (client) {
-    console.debug(client.getParameters().get('one_option'))
+    console.debug(
+        client.get('one_option', 10),
+        client.get('xone_option', 15),
+    )
+      console.debug(client.get('colors'))
   })
 </script>
 <!--

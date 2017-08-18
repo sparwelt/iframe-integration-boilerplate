@@ -30,6 +30,25 @@ The side serving the content ( e.g. the one being integrated as iframe ) can sim
 </script>
 ```
 #### Methods
+```javascript
+/**
+ * returns the value of a given parmaeter apssed to the integration, if none can be found,
+ * the fallback is returned
+ * 
+ * @var string   parameterName           name of a parameter
+ * @var mixed    parameterValueFallback  fallback for the parameter value you wanna get
+ * 
+ * @return mixed
+ */
+get(parameterName, parameterValueFallback)
+
+/**
+ * returns object of url params
+ * 
+ * @return URLSearchParams 
+ */
+getParameters()
+```
 
 #### Properties
 
@@ -139,7 +158,13 @@ npm install
 * event system currently does not support separation of multiple host iframes inside one client page (events are always send to all hosts)
 * both pages must use https *or* http - no mixing
 * the placement element ( `iframe-integration-placement` by default ) always needs to exist before the render method is called
-* the iframe resizing event is first firedt after the host document finished loading, so optimize this page for an early `Load` event 
+* the iframe resizing event is first fired after the host document finished loading, so optimize this page for an early `Load` event 
+
+## TODOs
+* allow separation of multiple iframes for the event system
+* document existing CustomEvent Logic
+* implement CustomEvent Logic for event receiving, not just event emiting
+
 
 ## Browser Support
 

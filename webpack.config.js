@@ -13,7 +13,7 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.ModuleConcatenationPlugin(),
-    //new UglifyJSPlugin()
+    new UglifyJSPlugin()
   ],
   module: {
     loaders: [{

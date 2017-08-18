@@ -1,5 +1,6 @@
 import forEach from 'lodash-es/forEach'
 import filter from 'lodash-es/filter'
+import 'custom-event-polyfill'
 
 function eventEmitter (target) {
   target.prototype.eventHandlers = []
@@ -16,6 +17,7 @@ function eventEmitter (target) {
   }
   target.prototype.emit = function (name, data) {
     if (this.eventEmitReadyCallback()) {
+      this.sendCustomEvent(name, data)
       this.eventEmitSendCallback({name: name, data: data})
     } else {
       this.eventQueue.push({name: name, data: data})
@@ -25,6 +27,9 @@ function eventEmitter (target) {
     forEach(this.eventQueue, (event) => {
       this.emit(true, event)
     })
+  }
+  target.prototype.sendCustomEvent = function(name, data) {
+    document.dispatchEvent(new CustomEvent(name, {detail: data}))
   }
 
   return target

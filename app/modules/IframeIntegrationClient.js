@@ -5,19 +5,21 @@ import endsWith from 'lodash-es/endsWith'
 import isEmpty from 'lodash-es/isEmpty'
 import assign from 'lodash-es/assign'
 import omit from 'lodash-es/omit'
+import isObject from 'lodash-es/isObject'
 import eventEmitter from './eventEmitter'
 import forEach from 'lodash-es/forEach'
 import 'element-dataset/lib/browser/index.es'
 
 @eventEmitter
 class IframeIntegrationClient {
+
   /**
    * constructor
    *
-   * @param settings
+   * @param configuredSettings
    * @param clientName
    */
-  constructor (settings, clientName = 'iframe-resizer') {
+  constructor (configuredSettings, clientName = 'iframe-resizer') {
     this.clientName = clientName
     this.iFrameResize = iFrameResize
     this.active = false
@@ -28,9 +30,11 @@ class IframeIntegrationClient {
       width: '100%',
       cssSelector: 'iframe-integration-placement'
     }
+    this.settings = assign({}, this.defaultSettings, configuredSettings)
+
     this.eventEmitSendCallback = (payload) => {
-      // we kinda need the iframe selector here
-      forEach(document.querySelectorAll('iframe'), (element) => {
+      // we kinda need the iframe selector here @todo optimize the selector logic here
+      forEach(document.querySelectorAll('[data-iic-active]'), (element) => {
         if (!isUndefined(element.iFrameResizer)) {
           element.iFrameResizer.sendMessage(payload)
         }
@@ -39,7 +43,6 @@ class IframeIntegrationClient {
     this.eventEmitReadyCallback = () => {
       return this.active
     }
-    this.defaultSettings = assign({}, this.defaultSettings, settings)
   }
 
   /**
@@ -49,11 +52,13 @@ class IframeIntegrationClient {
    * @returns {string}
    */
   encodeQueryData (data) {
-    let ret = []
-    for (let d in data) {
-      ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]))
-    }
-    return ret.join('&')
+    return Object.keys(data).map((k) => {
+        // we have an object, we gonna json-stringifiy it
+        if (isObject(data[k])) {
+            data[k] = JSON.stringify(data[k])
+        }
+        return `${encodeURIComponent(k)}=${encodeURIComponent(data[k])}`
+    }).join('&');
   }
 
   /**
@@ -100,13 +105,13 @@ class IframeIntegrationClient {
   }
 
   /**
-   * returns settings object based on default and local settings
+   * returns settings object based on settings and element settings
    *
-   * @param settings
+   * @param localSettings
    * @returns {*}
    */
-  getFullSettings (settings) {
-    return assign({}, this.defaultSettings, settings)
+  getFullSettings (localSettings) {
+    return assign({}, this.settings, localSettings)
   }
 
   /**
@@ -142,6 +147,7 @@ class IframeIntegrationClient {
       // assign url & attributes
       iframe.setAttribute('style', `width: ${settings.width}; border: none`)
       iframe.setAttribute('id', generatedId)
+      iframe.setAttribute('data-iic-active', true)
       iframe.setAttribute('scrolling', settings.scrolling ? 'yes' : 'no')
 
       /**
