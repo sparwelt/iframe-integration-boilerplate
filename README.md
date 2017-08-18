@@ -12,11 +12,11 @@ It mostly uses & integrates https://github.com/davidjbradshaw/iframe-resizer whi
 * allows you to provide a simple js client for your iframe based application that allows
     * dynamic sizing
     * easy passing of variables ( set variables are translated as get parameters )
-    * asynchronous initialization
+    * asynchronous initialization on both ends
 
 ## Integration
 
-### Content Serving side
+### Content Serving side - host.js
 
 The side serving the content ( e.g. the one being integrated as iframe ) can simply use the `dist/host.min.js` file
 
@@ -29,14 +29,34 @@ The side serving the content ( e.g. the one being integrated as iframe ) can sim
   }(window, document, 'script', 'iih'));
 </script>
 ```
+#### Methods
+```javascript
+/**
+ * returns the value of a given parmaeter apssed to the integration, if none can be found,
+ * the fallback is returned
+ * 
+ * @var string   parameterName           name of a parameter
+ * @var mixed    parameterValueFallback  fallback for the parameter value you wanna get
+ * 
+ * @return mixed
+ */
+get(parameterName, parameterValueFallback)
 
-### Integrating Side
+/**
+ * returns object of url params
+ * 
+ * @return URLSearchParams 
+ */
+getParameters()
+```
+
+#### Properties
+
+### Integrating Side - client.js
 
 The side integrating the iframe should load the `dist/client.min.js` provided here.
 
-## Usage client.js
-
-### Use as is
+#### Usage
 You can simply use the script as is and provide your custom information on initialization
 All Names and default values can be changed in the/with a custom `app/client.js` and by simply adapting the script below.  
 ```html
@@ -71,33 +91,56 @@ All Names and default values can be changed in the/with a custom `app/client.js`
 *                         - targetUrl           what base url to load in the iframe
 *                         - localElementTagName css selector of the element to transform
 *                         - width               with of the element - default 100%
+*                         + all settings avaiabile for the internal iframe resizer
+*                         @see https://github.com/davidjbradshaw/iframe-resizer#options
 */
-render([{parameters}], [{settings}]);
+render({parameters}, {settings});
+```
+#### Properties
+```javascript
+/**
+ * the iframe resize client itself for avaible methods see
+ * @see https://github.com/davidjbradshaw/iframe-resizer#callback-methods
+ */
+iFrameResize
 ```
 
-#### Synchronous Usage
-If you want to use the script synchronously, thats also possibile
+#### Events ( Host & Client )
+```javascript
+/**
+ * binds a listener (callback) to a given event
+ *  
+ * @var string   eventName  name of the event to be listened on
+ * @var callback callback   callback that is triggered when event happens
+ *                          - data    data send to the event
+ *                          - name    name of the event ( same as eventName )
+ *                          - iframe  iframe the event was send from
+ **/
+iic('on', [eventName, callback(data, name, iframe)])
 
-```html
-<your-integration-placement></your-integration-placement>
-<script src="http://example-serving-side.com/dist/client.js"></script>
-<script>
-    window.iframeIntegrationClient.render(
-        {
-            'your_option' : 'someValue',
-            'another_option' : 'anotherValue'
-        }, {
-            targetUrl: 'http://example-serving-side.com/your-iframe-source.html',
-            localElementTagName: 'iframe-integration-placement'
-        }
-    );
-</script>
+/**
+ * fires an event
+ * 
+ * @var string  eventName name of the event being emitted/fired
+ * @var mixed   data send for the event
+ **/
+iic('emit', [eventName, data])
+```
+##### Example
+```javascript
+  // on client side, use iih on host side  
+  iic('on', ['value.changed', function (data, name, iframe) {
+    console.log(data.content)
+  }]);
+  […]
+  // on host side, use iic on client side
+  iih('emit', ['value.changed', {content: 'some value'}])
 ```
 
-### Customize
+#### Customize
 To change the naming or preset your placement name & url simply modify the `app/client.js` file ( or create your own) and build the application.
 
-### How to build the app
+## How to build the app
 Simply install all npm dependencies ( including dev dependencies ) and run build.
 
 ```bash
@@ -112,9 +155,16 @@ npm install
 `npm install` only needs to be run once of course.
 
 ## Things to keep in mind / known limitations
-* (currently not working due to IE issues) the library also allows some event transmission, check the source of `app/IframeIntegrationClient.js` for details
+* event system currently does not support separation of multiple host iframes inside one client page (events are always send to all hosts)
 * both pages must use https *or* http - no mixing
-* the placement element ( `iframe-integration-placement` by default ) always needs to exist before the render method is called 
+* the placement element ( `iframe-integration-placement` by default ) always needs to exist before the render method is called
+* the iframe resizing event is first fired after the host document finished loading, so optimize this page for an early `Load` event 
+
+## TODOs
+* allow separation of multiple iframes for the event system
+* document existing CustomEvent Logic
+* implement CustomEvent Logic for event receiving, not just event emiting
+
 
 ## Browser Support
 

@@ -1,7 +1,11 @@
 module.exports = {
-    "extends": "standard",
-    "plugins": [
-        "standard",
-        "promise"
-    ]
+  "extends": "standard",
+  "parser": "babel-eslint",
+  "plugins": [
+    "standard",
+    "promise"
+  ],
+  "rules": {
+    "yoda": ["error", "always"]
+  }
 };
