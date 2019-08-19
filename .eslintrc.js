@@ -1,11 +1,19 @@
 module.exports = {
-  "extends": "standard",
-  "parser": "babel-eslint",
-  "plugins": [
-    "standard",
-    "promise"
+  env: {
+    browser: true,
+    es6: true
+  },
+  extends: [
+    'standard'
   ],
-  "rules": {
-    "yoda": ["error", "always"]
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly'
+  },
+  parserOptions: {
+    ecmaVersion: 2018,
+    sourceType: 'module'
+  },
+  rules: {
   }
-};
+}

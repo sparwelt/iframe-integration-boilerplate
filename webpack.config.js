@@ -1,5 +1,4 @@
 const path = require('path')
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const webpack = require('webpack')
 
 module.exports = {
@@ -11,20 +10,21 @@ module.exports = {
     filename: '[name].min.js',
     path: path.resolve(__dirname, 'dist')
   },
-  plugins: [
-    new webpack.optimize.ModuleConcatenationPlugin(),
-    new UglifyJSPlugin()
-  ],
   module: {
-    loaders: [{
+    rules: [{
       test: /\.js$/,
       exclude: /node_modules/,
-      loader: 'babel-loader',
-      query: {
-        presets: ['es2015'],
-        plugins: [
-          ['transform-decorators-legacy']
-        ]
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/preset-env'],
+          plugins: [
+            [
+              '@babel/plugin-proposal-decorators',
+              { legacy: true },
+            ],
+          ]
+        }
       }
     }]
   }
