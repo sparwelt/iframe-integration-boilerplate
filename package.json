@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" ",
     "build": "echo \"Starting Build\" && ./node_modules/.bin/webpack --mode production",
-    "lint": "echo \"Starting Lint\" && ./node_modules/.bin/eslint app/*"
+    "lint": "echo \"Starting Lint\" && yarn eslint app/"
   },
   "repository": {
     "type": "git",

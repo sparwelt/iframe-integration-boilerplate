@@ -1,13 +1,13 @@
 import isFunction from 'lodash-es/isFunction'
 import isUndefined from 'lodash-es/isUndefined'
 
-let asyncClient = function (win, Client, serviceName, asyncServiceName, settings) {
+const asyncClient = function (win, Client, serviceName, asyncServiceName, settings) {
   win[serviceName] = new Client(
     settings,
     serviceName
   )
 
-  let applyCall = (method, args) => {
+  const applyCall = (method, args) => {
     if (isFunction(method)) {
       method(win[serviceName])
     } else {

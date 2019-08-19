@@ -121,7 +121,7 @@ class IframeIntegrationClient {
    * @returns {*}
    */
   getElements (cssSelector) {
-    let elements = document.querySelectorAll(cssSelector)
+    const elements = document.querySelectorAll(cssSelector)
 
     if (isUndefined(elements)) {
       throw new Error(`no matching element for listing was found or provided, place an ${cssSelector} on the page before executing the render method or pass an element along as the third parameter`)
@@ -141,8 +141,8 @@ class IframeIntegrationClient {
     settings = this.getFullSettings(settings)
 
     forEach(this.getElements(settings.cssSelector), (element) => {
-      let generatedId = this.generateRandomId()
-      let iframe = document.createElement('iframe')
+      const generatedId = this.generateRandomId()
+      const iframe = document.createElement('iframe')
 
       // assign url & attributes
       iframe.setAttribute('style', `width: ${settings.width}; border: none`)
