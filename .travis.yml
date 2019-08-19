@@ -7,9 +7,9 @@ cache:
   directories:
   - node_modules # NPM packages
 install:
-  - npm install
-  - npm run build
-  - npm run lint
+  - yarn install
+  - yarn build
+  - yarn lint
 deploy:
   provider: npm
   email: abs-saas@sparwelt.de
