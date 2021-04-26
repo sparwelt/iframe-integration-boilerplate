@@ -22,7 +22,7 @@
     "custom-event-polyfill": "1.0.7",
     "element-dataset": "2.2.6",
     "iframe-resizer": "4.1.1",
-    "lodash-es": "4.17.15",
+    "lodash-es": "4.17.21",
     "url-search-params-polyfill": "7.0.0"
   },
   "devDependencies": {
